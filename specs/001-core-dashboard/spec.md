@@ -5,6 +5,15 @@
 **Status**: Draft  
 **Input**: User description: "Please read CORE Features (MVP Only) from @requirements.md"
 
+## Clarifications
+
+### Session 2025-11-19
+
+- Q: How should the five mood emojis map to the three stats buckets? → A: 😀 + 😊 = Happy, 😐 = Neutral, 😞 + 😤 = Stressed
+- Q: How should the team goal completion percentage be calculated? → A: Completed goals ÷ total goals across all members
+- Q: How should member cards behave when no goals are assigned? → A: Keep card visible with “0/0 goals” plus helper text “No goals yet today”
+- Q: How many mood updates per day per member should be allowed? → A: Unlimited updates, with only the latest value kept
+
 ## User Scenarios & Manual Verification *(mandatory)*
 
 <!--
@@ -69,9 +78,9 @@ Any teammate can report their current mood emoji via the dashboard so the team c
 
 ### Edge Cases
 
-- No goals yet for a member: their card still appears with “0/0 goals” and an empty list.
+- No goals yet for a member: their card still appears with “0/0 goals” and an empty list plus helper text “No goals yet today.”
 - All goals completed: completion counter shows full value and checkboxes render checked but still allow unchecking if a task reopens.
-- Duplicate mood submissions: the latest submission overrides the prior entry without stacking multiple moods.
+- Duplicate mood submissions: the latest submission overrides the prior entry without stacking multiple moods; users may update mood unlimited times per day.
 - Invalid goal description (blank or >250 chars): form displays an inline error and prevents save.
 - Add goal/update mood while data refresh in progress: optimistic UI shows spinner until confirmation to avoid conflicting states.
 - Dashboard load failure: show a friendly error and retry CTA instead of a blank page.
@@ -85,8 +94,8 @@ Any teammate can report their current mood emoji via the dashboard so the team c
 - **FR-003**: The Add Goal form MUST provide a team-member dropdown plus a text field, enforce non-empty descriptions, and append new goals to the selected card upon submission.
 - **FR-004**: The Update Mood form MUST offer the same team-member dropdown plus the five emoji options (😀 😊 😐 😞 😤) and persist the latest selection per member.
 - **FR-005**: All goal additions, completions, and mood updates MUST reflect in the stats panel and related cards without requiring a full page reload.
-- **FR-006**: The stats panel MUST show overall team goal completion percentage for the current day.
-- **FR-007**: The stats panel MUST list counts of members who are happy, neutral, or stressed based on their most recent mood emoji.
+- **FR-006**: The stats panel MUST show overall team goal completion percentage for the current day, defined as completed goals divided by total goals across all members.
+- **FR-007**: The stats panel MUST list counts of members who are happy, neutral, or stressed based on their most recent mood emoji (😀 + 😊 → Happy, 😐 → Neutral, 😞 + 😤 → Stressed).
 - **FR-008**: The system MUST validate and store all updates against the current day so historical data does not accumulate in the MVP.
 - **FR-009**: If a save operation fails, the UI MUST surface a clear error message and leave the prior values unchanged.
 
