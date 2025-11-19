@@ -1,50 +1,61 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version: none → 1.0.0
+- Modified principles: (template placeholders) → Dashboard Simplicity, Vue 3 + DaisyUI, .NET 8 + Dapper, SQLite Local Data, Manual Verification Only
+- Added sections: Scope Guardrails, Delivery Workflow, Governance policy
+- Removed sections: Template placeholders
+- Templates requiring updates: .specify/templates/plan-template.md ✅, .specify/templates/spec-template.md ✅, .specify/templates/tasks-template.md ✅
+- Follow-up TODOs: none
+-->
+# GoalTracker Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### P1. Dashboard-First Simplicity
+Deliver a single desktop dashboard that lists team members, their moods, and their daily goals.
+Every feature MUST directly support logging moods, adding goals, checking completion counts,
+or showing team-wide stats—extra pages, history views, and visualizations stay out.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### P2. Vue 3 + DaisyUI Frontend
+All UI work MUST use Vue 3 with the Composition API, TypeScript strict mode, Tailwind, and DaisyUI
+components. Keep client logic thin, reuse composables for shared state, and avoid alternative UI
+libraries or CSS frameworks that duplicate DaisyUI capabilities.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### P3. .NET 8 Web API with Dapper
+Backend code MUST run on .NET 8 Web API endpoints with Dapper for every data access. Avoid ORMs or
+middleware layers that obscure SQL; favor concise parameterized queries and DTOs tailored to the
+dashboard payloads to keep latency low.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### P4. SQLite Local Persistence
+Use SQLite as the default datastore (file-backed, local). If SQL Server is ever required, it MUST run
+in Docker with identical schema and Dapper mappings. Keep schema minimal—tables for team members,
+goals, and moods only—and design seed data that keeps local bootstrapping trivial.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### P5. Manual Verification Only
+Automated tests (unit, integration, e2e, contract) are disallowed. Authors MUST rely on manual
+walkthroughs of the dashboard flows after each change. Any tooling, CI jobs, or templates that would
+generate automated tests MUST stay disabled or be removed.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Scope Guardrails
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The product excludes authentication, multi-day history, analytics, notifications, admin tooling,
+goal editing beyond add/complete/delete, recurring goals, categories, responsive/mobile layouts,
+dark mode, profile pages, or any feature not explicitly listed in the MVP requirements. Enforce
+these omissions during planning and reviews to keep velocity high and UX focused.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Delivery Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Keep a single web frontend (`frontend/`) and backend (`backend/`) codepath. Frontend tasks implement
+Vue 3 components/composables, while backend tasks expose the requisite REST endpoints plus Dapper
+queries. Each feature branch MUST document manual verification steps instead of tests. Deployment is
+local-only: `npm run dev` for frontend and `dotnet run` for backend.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution supersedes ad-hoc practices; reviewers MUST confirm compliance before merging.
+- Amendments require consensus on scope/stack changes plus simultaneous template updates.
+- Versioning follows semantic rules: major for breaking governance, minor for new principles or
+  sections, patch for clarifications.
+- Ratified guidance remains in force until superseded; compliance reviews occur per feature.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-11-19 | **Last Amended**: 2025-11-19
