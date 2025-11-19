@@ -1,0 +1,177 @@
+openapi: 3.1.0
+info:
+  title: GoalTracker Dashboard API
+  version: 1.0.0
+  description: >
+    Minimal endpoints powering the Core Dashboard MVP. All data is scoped to the current day.
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/dashboard:
+    get:
+      summary: Fetch dashboard snapshot
+      tags: [Dashboard]
+      responses:
+        '200':
+          description: Current-day members, goals, and stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+  /api/goals:
+    post:
+      summary: Add a new goal for a member
+      tags: [Goals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddGoalRequest'
+      responses:
+        '201':
+          description: Goal added; returns refreshed member payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalResponse'
+        '400':
+          description: Validation error
+  /api/goals/{goalId}:
+    patch:
+      summary: Toggle goal completion
+      tags: [Goals]
+      parameters:
+        - name: goalId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isCompleted:
+                  type: boolean
+              required: [isCompleted]
+      responses:
+        '200':
+          description: Updated goal plus stats delta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalResponse'
+        '404':
+          description: Goal not found for current day
+  /api/moods:
+    post:
+      summary: Update a member's current mood
+      tags: [Mood]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMoodRequest'
+      responses:
+        '200':
+          description: Updated mood entry plus stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoodResponse'
+        '400':
+          description: Invalid emoji or member
+
+components:
+  schemas:
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        emoji:
+          type: string
+          enum: ['😀','😊','😐','😞','😤', '']
+        goals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Goal'
+        completedCount:
+          type: integer
+        totalCount:
+          type: integer
+        helperText:
+          type: string
+          description: Shows “No goals yet today” when totalCount is 0.
+    Goal:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        isCompleted:
+          type: boolean
+    DashboardResponse:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+        stats:
+          $ref: '#/components/schemas/Stats'
+    Stats:
+      type: object
+      properties:
+        completionPercent:
+          type: number
+          format: float
+        happyCount:
+          type: integer
+        neutralCount:
+          type: integer
+        stressedCount:
+          type: integer
+    AddGoalRequest:
+      type: object
+      properties:
+        memberId:
+          type: integer
+        description:
+          type: string
+          minLength: 1
+          maxLength: 250
+      required: [memberId, description]
+    GoalResponse:
+      type: object
+      properties:
+        member:
+          $ref: '#/components/schemas/Member'
+        stats:
+          $ref: '#/components/schemas/Stats'
+    UpdateMoodRequest:
+      type: object
+      properties:
+        memberId:
+          type: integer
+        emoji:
+          type: string
+          enum: ['😀','😊','😐','😞','😤']
+      required: [memberId, emoji]
+    MoodResponse:
+      type: object
+      properties:
+        memberId:
+          type: integer
+        emoji:
+          type: string
+        stats:
+          $ref: '#/components/schemas/Stats'
+
