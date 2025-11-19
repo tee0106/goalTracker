@@ -11,6 +11,13 @@ var builder = WebApplication.CreateBuilder(filteredArgs);
 builder.Configuration.AddEnvironmentVariables(prefix: "GOALTRACKER_");
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+             builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+});
 builder.Services.AddDatabaseMigrations();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<DashboardQueries>();
@@ -49,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("AllowAll");
+app.MapGet("/", () => $"Hi this is GoalTracker API backend.");
 app.MapControllers();
 
 await app.RunAsync();

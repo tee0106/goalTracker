@@ -71,8 +71,8 @@ public sealed class DashboardQueries
             FROM MoodEntries
             WHERE work_date = date('now')
         )
-        SELECT tm.id,
-               tm.name,
+        SELECT tm.id AS Id,
+               tm.name AS Name,
                tm.order_index AS OrderIndex,
                COALESCE(m.emoji, '') AS Emoji,
                totals.completed_count AS CompletedCount,
@@ -101,8 +101,8 @@ public sealed class DashboardQueries
             FROM MoodEntries
             WHERE work_date = date('now')
         )
-        SELECT tm.id,
-               tm.name,
+        SELECT tm.id AS Id,
+               tm.name AS Name,
                tm.order_index AS OrderIndex,
                COALESCE(m.emoji, '') AS Emoji,
                totals.completed_count AS CompletedCount,
@@ -165,9 +165,32 @@ public sealed class DashboardQueries
         FROM goal_counts, mood_counts
         """;
 
-    private sealed record MemberRow(int Id, string Name, int? OrderIndex, string? Emoji, int? CompletedCount, int? TotalCount);
-    private sealed record GoalRow(int Id, int MemberId, string Description, int IsCompleted);
-    private sealed record StatsRow(int CompletedGoals, int TotalGoals, int HappyCount, int NeutralCount, int StressedCount);
+    private sealed class MemberRow
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public int? OrderIndex { get; set; }
+        public string? Emoji { get; set; }
+        public int? CompletedCount { get; set; }
+        public int? TotalCount { get; set; }
+    }
+
+    private sealed class GoalRow
+    {
+        public int Id { get; set; }
+        public int MemberId { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public int IsCompleted { get; set; }
+    }
+
+    private sealed class StatsRow
+    {
+        public int CompletedGoals { get; set; }
+        public int TotalGoals { get; set; }
+        public int HappyCount { get; set; }
+        public int NeutralCount { get; set; }
+        public int StressedCount { get; set; }
+    }
 }
 
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoalTracker.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/moods")]
 public sealed class MoodController : ControllerBase
 {
     private readonly MoodCommands _commands;
