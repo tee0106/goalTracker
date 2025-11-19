@@ -35,7 +35,17 @@ Branch: `001-core-dashboard`
    - Wait 15 seconds without touching UI; confirm dashboard silently refreshes (network call visible in devtools) and retains optimistic changes.
 6. **Failure handling**:
    - Kill backend process and attempt Add Goal; expect inline error “Unable to save right now” and prior data unchanged. Restart backend afterwards.
+7. **Evidence capture**:
+   - Take a screenshot of the full dashboard plus goal/mood forms and store it under `docs/evidence/us1-dashboard.png`.
+   - Record short clips or console transcripts for the Add Goal and Update Mood flows (`docs/evidence/us2-add-goal.md`, `docs/evidence/us3-update-mood.md`).
+
+## 3b. Evidence Tracker (placeholders)
+| Story | Artifact | Status |
+|-------|----------|--------|
+| US1 – Dashboard snapshot | `docs/evidence/us1-dashboard.png` | _attach screenshot_ |
+| US2 – Add Goal walkthrough | `docs/evidence/us2-add-goal.md` | _paste console log_ |
+| US3 – Update Mood walkthrough | `docs/evidence/us3-update-mood.md` | _paste console log_ |
 
 ## 4. Resetting Day
-- Run `dotnet run --project backend/GoalTracker.Api.csproj -- reset-today` (CLI helper) or execute SQL `DELETE FROM Goals; DELETE FROM MoodEntries;` to clear current-day data before next demo.
+- Run `backend/scripts/reset-today.ps1` or `dotnet run --project backend/GoalTracker.Api.csproj -- reset-today` (CLI helper) to clear previous-day data before next demo. Both commands vacuum the database after deleting rows older than today.
 

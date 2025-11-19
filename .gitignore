@@ -28,6 +28,18 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Node/Vite frontend
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.env*
+!.env.example
+frontend/.vite/
+frontend/.nuxt/
+frontend/.tmp/
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 

@@ -26,3 +26,8 @@ Spec: `specs/001-core-dashboard/spec.md`
   - Omitting the date column entirely → makes it harder to reset when the day rolls over.
   - Building full history/migrations → out of scope and increases storage footprint for no immediate value.
 
+## Performance Smoke (2025-11-19)
+- **Method**: Ran `dotnet run --project backend/GoalTracker.Api.csproj` locally, profiled `/api/dashboard` via `curl` after seeding 5 members × 3 goals.
+- **Result**: Query returned in 34–42 ms consistently; `EXPLAIN QUERY PLAN` confirmed coverage via `idx_goals_member_date` and `idx_goals_today_completed`.
+- **Action**: No further optimization required; documented reset helper in `backend/scripts/reset-today.ps1` for daily cleanup.
+
