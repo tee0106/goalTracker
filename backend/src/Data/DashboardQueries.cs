@@ -39,8 +39,8 @@ public sealed class DashboardQueries
         var memberGoals = goals.Where(g => g.MemberId == row.Id)
             .Select(g => new GoalDto(g.Id, g.Description, g.IsCompleted == 1))
             .ToList();
-        var total = row.TotalCount ?? memberGoals.Count;
-        var completed = row.CompletedCount ?? memberGoals.Count(g => g.IsCompleted);
+        var total = (int)(row.TotalCount ?? memberGoals.Count);
+        var completed = (int)(row.CompletedCount ?? memberGoals.Count(g => g.IsCompleted));
         return new MemberDto(
             row.Id,
             row.Name,
@@ -56,7 +56,7 @@ public sealed class DashboardQueries
         var completionPercent = row.TotalGoals == 0
             ? 0
             : Math.Round((double)row.CompletedGoals / row.TotalGoals * 100, 1);
-        return new DashboardStats(completionPercent, row.HappyCount, row.NeutralCount, row.StressedCount);
+        return new DashboardStats(completionPercent, (int)row.HappyCount, (int)row.NeutralCount, (int)row.StressedCount);
     }
 
     private const string MembersSqlAll =
@@ -171,8 +171,8 @@ public sealed class DashboardQueries
         public string Name { get; set; } = string.Empty;
         public int? OrderIndex { get; set; }
         public string? Emoji { get; set; }
-        public int? CompletedCount { get; set; }
-        public int? TotalCount { get; set; }
+        public long? CompletedCount { get; set; }
+        public long? TotalCount { get; set; }
     }
 
     private sealed class GoalRow
@@ -185,11 +185,11 @@ public sealed class DashboardQueries
 
     private sealed class StatsRow
     {
-        public int CompletedGoals { get; set; }
-        public int TotalGoals { get; set; }
-        public int HappyCount { get; set; }
-        public int NeutralCount { get; set; }
-        public int StressedCount { get; set; }
+        public long CompletedGoals { get; set; }
+        public long TotalGoals { get; set; }
+        public long HappyCount { get; set; }
+        public long NeutralCount { get; set; }
+        public long StressedCount { get; set; }
     }
 }
 
